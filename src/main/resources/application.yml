@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/collabhub
+    username: postgres
+    password: postgres
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+  jackson:
+    time-zone: UTC
+
+logging:
+  level:
+    org.postgresql: DEBUG
+
+server:
+  port: 9090
