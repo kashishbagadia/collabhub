@@ -1,11 +1,13 @@
 package com.collabhub.controller;
 
+import com.collabhub.dto.ApiResponse;
 import com.collabhub.dto.CreateUserRequest;
 import com.collabhub.dto.UserResponse;
 import com.collabhub.entity.User;
 import com.collabhub.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
 
@@ -25,8 +27,25 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponse createUser( @Valid @RequestBody CreateUserRequest request){
-        return userService.createUser(request);
+    public ApiResponse<UserResponse> createUser( @RequestBody @Valid CreateUserRequest request){
+        UserResponse response = userService.createUser(request);
+
+        return new ApiResponse<>(
+                true,
+                "User created successfully",
+                response
+        );
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<UserResponse> getUserById(@PathVariable Long id){
+        UserResponse response = userService.getUserById(id);
+
+        return new ApiResponse<>(
+                true,
+                "User fetched successfully",
+                response
+        );
     }
 
     @GetMapping("/ping")

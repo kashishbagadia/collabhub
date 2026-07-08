@@ -4,6 +4,7 @@ import com.collabhub.dto.CreateUserRequest;
 import com.collabhub.dto.UserResponse;
 import com.collabhub.entity.User;
 import com.collabhub.exception.ResourceAlreadyExistsException;
+import com.collabhub.exception.ResourceNotFoundException;
 import com.collabhub.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class UserService {
         if(userRepository.existsByEmail(request.getEmail())){
             throw new ResourceAlreadyExistsException("Email already exists");
         }
+
         User user = User.builder()
                 .fullName(request.getFullName())
                 .email(request.getEmail())
@@ -50,6 +52,19 @@ public class UserService {
                 .id(savedUser.getId())
                 .fullName(savedUser.getFullName())
                 .email(savedUser.getEmail())
+                .build();
+    }
+
+    public UserResponse getUserById(Long id){
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .fullName(user.getFullName())
+                .email(user.getEmail())
                 .build();
     }
 }
